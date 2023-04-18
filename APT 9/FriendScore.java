@@ -3,19 +3,23 @@ import java.util.*;
 public class FriendScore {
     public int highestScore(String[] friends) {
         int max = 0;
+        boolean enteredIterator = false;
         // hashmap maps each person with whom they are friends with
         HashMap<Integer, HashSet<Integer>> friendsMap = new HashMap<>();
         for (int i=0;i<friends.length;i++) {
+            friendsMap.putIfAbsent(i, new HashSet<Integer>());
             for (int j=i+1;j<friends.length;j++) {
-                friendsMap.putIfAbsent(i, new HashSet<Integer>());
                 if (friends[i].charAt(j) == 'Y') {
+                    enteredIterator = true;
                     friendsMap.get(i).add(j);
                     friendsMap.putIfAbsent(j, new HashSet<Integer>());
                     friendsMap.get(j).add(i);
                 }
             }
         }
-        if (friendsMap.isEmpty()) return 0;
+        // if none of the people have any friends, return 0:
+        if (!enteredIterator) return 0;
+        
         // by this point, the map should be full with each person, ...
         // ..and their friend. 
         int numFriends;
